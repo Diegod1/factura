@@ -1,286 +1,229 @@
 <div class="container-fluid">
-    <div class="top-bar">
-        <h3>Gestión de Facturas</h3>
-        <button class="btn btn-primary" (click)="abrirModal(modalFactura)">+ Crear Nueva Factura</button>
+    <!-- Mensaje de error -->
+    <div *ngIf="error" class="alert alert-danger mt-3" role="alert">
+        {{ error }}
     </div>
 
-    <div class="input-group-box">
-      <div class="row">
-        <div class="col-md-4 mb-3">
-          <label for="codigoCliente">Buscar por Código o Cliente</label>
-          <input type="text" id="codigoCliente" class="form-control" placeholder="Código de Factura o Cliente">
+    <!-- Indicador de carga -->
+    <div *ngIf="cargando" class="text-center mt-3">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
         </div>
-        <div class="col-md-4 mb-3">
-          <label for="estado">Filtrar por Estado</label>
-          <select id="estado" class="form-control">
-            <option selected>Todos los estados</option>
-            <option>PAGADA</option>
-            <option>ANULADA</option>
-            <option>EMITIDA</option>
-          </select>
-        </div>
-        <div class="col-md-4 mb-3">
-          <label for="cliente">Filtrar por Cliente</label>
-          <select id="cliente" class="form-control">
-            <option selected>Todos los clientes</option>
-            <option>Colanta</option>
-            <option>Falabella</option>
-          </select>
-        </div>
-      </div>
+        <p class="mt-2">Cargando facturas...</p>
     </div>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Código</th>
-          <th>Cliente</th>
-          <th>Fecha emisión</th>
-          <th>Fecha vencimiento</th>
-          <th>Moneda</th>
-          <th>Tasa cambio emisión</th>
-          <th>Estado Facturación</th>
-          <th>Valor pagado</th>
-          <th>Fecha pago</th>
-          <th>Tasa cambio pago</th>
-          <th>Estado</th>
-          <th>Acción</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>2020101</td>
-          <td>Colanta</td>
-          <td>1/5/2025</td>
-          <td>17/5/2025</td>
-          <td>COP</td>
-          <td>$ 1</td>
-          <td><span class="badge badge-success">PAGADA</span></td>
-          <td>$ 300.000</td>
-          <td>5/5/2025</td>
-          <td>$ 1</td>
-          <td><span class="badge bg-success">Activo</span></td>
-          <td class="action-icons">
-            <i class="bi bi-eye-fill text-light-blue"></i>
-            <i class="bi bi-pencil-fill text-primary" (click)="abrirModalEditar(modalEditarFactura)"></i>
-            <i class="bi bi-trash-fill text-danger"></i>
-          </td>
-        </tr>
-        <tr>
-          <td>2020102</td>
-          <td>Colanta</td>
-          <td>3/5/2025</td>
-          <td>29/5/2025</td>
-          <td>COP</td>
-          <td>$ 1</td>
-          <td><span class="badge badge-success">PAGADA</span></td>
-          <td>$ 200.000</td>
-          <td>5/5/2025</td>
-          <td>$ 1</td>
-          <td><span class="badge bg-success">Activo</span></td>
-          <td class="action-icons">
-            <i class="bi bi-pencil-fill text-primary" (click)="abrirModalEditar(modalEditarFactura)"></i>
-            <i class="bi bi-trash-fill text-danger"></i>
-          </td>
-        </tr>
-        <tr>
-          <td>2020103</td>
-          <td>Colanta</td>
-          <td>4/5/2025</td>
-          <td>23/5/2025</td>
-          <td>COP</td>
-          <td>$ 1</td>
-          <td><span class="badge badge-danger">ANULADO</span></td>
-          <td>$ 0</td>
-          <td>N/A</td>
-          <td>$ 0</td>
-          <td><span class="badge bg-danger">Inactivo</span></td>
-          <td class="action-icons">
-            <i class="bi bi-pencil-fill text-primary" (click)="abrirModalEditar(modalEditarFactura)"></i>
-            <i class="bi bi-trash-fill text-danger"></i>
-          </td>
-        </tr>
-        <tr>
-          <td>2020201</td>
-          <td>Colanta</td>
-          <td>3/5/2025</td>
-          <td>31/5/2025</td>
-          <td>COP</td>
-          <td>$ 1</td>
-          <td><span class="badge badge-success">PAGADA</span></td>
-          <td>$ 200.000</td>
-          <td>5/5/2025</td>
-          <td>$ 1</td>
-          <td><span class="badge bg-success">Activo</span></td>
-          <td class="action-icons">
-            <i class="bi bi-pencil-fill text-primary" (click)="abrirModalEditar(modalEditarFactura)"></i>
-            <i class="bi bi-trash-fill text-danger"></i>
-          </td>
-        </tr>
-        <tr>
-          <td>2020202</td>
-          <td>Colanta</td>
-          <td>3/5/2025</td>
-          <td>7/6/2025</td>
-          <td>COP</td>
-          <td>$ 1</td>
-          <td><span class="badge badge-danger">ANULADO</span></td>
-          <td>$ 0</td>
-          <td>N/A</td>
-          <td>$ 0</td>
-          <td><span class="badge bg-danger">Inactivo</span></td>
-          <td class="action-icons">
-            <i class="bi bi-pencil-fill text-primary" (click)="abrirModalEditar(modalEditarFactura)"></i>
-            <i class="bi bi-trash-fill text-danger"></i>
-          </td>
-        </tr>
-        <tr>
-          <td>2020204</td>
-          <td>Falabella</td>
-          <td>3/5/2025</td>
-          <td>7/6/2025</td>
-          <td>COP</td>
-          <td>$ 1</td>
-          <td><span class="badge badge-primary">EMITIDA</span></td>
-          <td>$ 0</td>
-          <td>N/A</td>
-          <td>$ 0</td>
-          <td><span class="badge bg-success">Activo</span></td>
-          <td class="action-icons">
-            <i class="bi bi-pencil-fill text-primary" (click)="abrirModalEditar(modalEditarFactura)"></i>
-            <i class="bi bi-trash-fill text-danger"></i>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <!-- Contenido principal -->
+    <div *ngIf="!cargando && !error">
+        <div class="top-bar">
+            <h3>Gestión de Facturas</h3>
+            <button class="btn btn-primary" (click)="abrirModal(modalFactura)">+ Crear Nueva Factura</button>
+        </div>
 
-  <!-- Modal -->
-  <ng-template #modalFactura let-modal>
-    <div class="modal-header">
-        <h5 class="modal-title">Registrar Nueva Factura</h5>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-    </div>
-    <div class="modal-body">
-        <form #facturaForm="ngForm" (ngSubmit)="guardarFactura(facturaForm)">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label for="codigoFactura" class="form-label">Código de Factura *</label>
-                    <input type="text" class="form-control" id="codigoFactura" name="codigoFactura" [(ngModel)]="nuevaFactura.codigoFactura" required>
+        <div class="input-group-box">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="codigoCliente">Buscar por Código o Cliente</label>
+                    <input type="text" id="codigoCliente" class="form-control" placeholder="Código de Factura o Cliente" [(ngModel)]="filtros.codigoCliente" (input)="aplicarFiltros()">
                 </div>
-                <div class="col-md-6">
-                    <label for="cliente" class="form-label">Cliente *</label>
-                    <select class="form-select" id="cliente" name="cliente" [(ngModel)]="nuevaFactura.cliente" required>
-                        <option value="" disabled selected>Seleccionar cliente</option>
-                        <option *ngFor="let cliente of clientes" [value]="cliente.id">{{cliente.nombre}}</option>
+                <div class="col-md-4 mb-3">
+                    <label for="estado">Filtrar por Estado</label>
+                    <select id="estado" class="form-control" [(ngModel)]="filtros.estado" (change)="aplicarFiltros()">
+                        <option selected>Todos los estados</option>
+                        <option *ngFor="let estado of estados">{{estado}}</option>
                     </select>
                 </div>
-
-                <div class="col-md-6">
-                    <label for="fechaEmision" class="form-label">Fecha de Emisión *</label>
-                    <div class="input-group">
-                        <input type="date" class="form-control" id="fechaEmision" name="fechaEmision" [(ngModel)]="nuevaFactura.fechaEmision" required>
-                        <span class="input-group-text"><i class="bi bi-calendar"></i></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <label for="fechaVencimiento" class="form-label">Fecha de Vencimiento *</label>
-                    <div class="input-group">
-                        <input type="date" class="form-control" id="fechaVencimiento" name="fechaVencimiento" [(ngModel)]="nuevaFactura.fechaVencimiento" required>
-                        <span class="input-group-text"><i class="bi bi-calendar"></i></span>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <label for="moneda" class="form-label">Moneda</label>
-                    <select class="form-select" id="moneda" name="moneda" [(ngModel)]="nuevaFactura.moneda">
-                        <option value="COP" selected>COP - Peso Colombiano</option>
+                <div class="col-md-4 mb-3">
+                    <label for="cliente">Filtrar por Cliente</label>
+                    <select id="cliente" class="form-control" [(ngModel)]="filtros.cliente" (change)="aplicarFiltros()">
+                        <option value="">Todos los clientes</option>
+                        <option *ngFor="let cliente of clientes" [value]="cliente">{{cliente}}</option>
                     </select>
                 </div>
-                <div class="col-md-6">
-                    <label for="valorFactura" class="form-label">Valor de la Factura *</label>
-                    <input type="number" class="form-control" id="valorFactura" name="valorFactura" [(ngModel)]="nuevaFactura.valorFactura" required>
-                </div>
-                <div class="col-md-6">
-                    <label for="tasaCambioEmision" class="form-label">Tasa de Cambio Emisión</label>
-                    <input type="number" class="form-control" id="tasaCambioEmision" name="tasaCambioEmision" [(ngModel)]="nuevaFactura.tasaCambioEmision">
-                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Guardar</button>
-            </div>
-        </form>
-    </div>
-</ng-template>
+        </div>
 
-<ng-template #modalEditarFactura let-modal>
-  <div class="modal-header">
-    <h5 class="modal-title">Editar Factura</h5>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-  </div>
-  <div class="modal-body">
-    <form #editarFacturaForm="ngForm" (ngSubmit)="actualizarFactura(editarFacturaForm)">
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label for="codigoFacturaEdit" class="form-label">Código de Factura *</label>
-          <input type="text" class="form-control" id="codigoFacturaEdit" name="codigoFactura" [(ngModel)]="facturaSeleccionada.codigoFactura" required>
+        <div *ngIf="facturasFiltradas.length === 0" class="alert alert-info">
+            No se encontraron facturas para mostrar.
         </div>
-        <div class="col-md-6">
-          <label for="clienteEdit" class="form-label">Cliente *</label>
-          <select class="form-select" id="clienteEdit" name="cliente" [(ngModel)]="facturaSeleccionada.cliente" required>
-            <option value="" disabled>Seleccionar cliente</option>
-            <option *ngFor="let cliente of clientes" [value]="cliente.id">{{cliente.nombre}}</option>
-          </select>
+
+        <table class="table" *ngIf="facturasFiltradas.length > 0">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Cliente</th>
+                    <th>Fecha emisión</th>
+                    <th>Fecha vencimiento</th>
+                    <th>Moneda</th>
+                    <th>Tasa cambio emisión</th>
+                    <th>Estado Facturación</th>
+                    <th>Valor pagado</th>
+                    <th>Fecha pago</th>
+                    <th>Tasa cambio pago</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let factura of facturasFiltradas">
+                    <td>{{factura.Factura_Id}}</td>
+                    <td>{{factura.Nombre_Cliente}}</td>
+                    <td>{{formatearFecha(factura.Fecha_Emision)}}</td>
+                    <td>{{formatearFecha(factura.Fecha_Vencimiento)}}</td>
+                    <td>{{factura.Descripcion_Moneda}}</td>
+                    <td>{{formatearMoneda(factura.Tasa_Cambio_Emision)}}</td>
+                    <td>
+                        <span class="badge" [ngClass]="{
+                            'badge-success': factura.Descripcion_Estado_Facturacion === 'PAGADA',
+                            'badge-danger': factura.Descripcion_Estado_Facturacion === 'ANULADA',
+                            'badge-primary': factura.Descripcion_Estado_Facturacion === 'EMITIDA'
+                        }">{{factura.Descripcion_Estado_Facturacion}}</span>
+                    </td>
+                    <td>{{formatearMoneda(factura.Valor_Pagado)}}</td>
+                    <td>{{formatearFecha(factura.Fecha_Pago)}}</td>
+                    <td>{{formatearMoneda(factura.Tasa_Cambio_Pago)}}</td>
+                    <td>
+                        <span class="badge" [ngClass]="{
+                            'bg-success': factura.Estado_Rec === 'A',
+                            'bg-danger': factura.Estado_Rec === 'I'
+                        }">{{factura.Estado_Rec === 'A' ? 'Activo' : 'Inactivo'}}</span>
+                    </td>
+                    <td class="action-icons">
+                        <i class="bi bi-eye-fill text-light-blue"></i>
+                        <i class="bi bi-pencil-fill text-primary" (click)="abrirModalEditar(modalEditarFactura, factura)"></i>
+                        <i class="bi bi-trash-fill text-danger"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal -->
+    <ng-template #modalFactura let-modal>
+        <div class="modal-header">
+            <h5 class="modal-title">Registrar Nueva Factura</h5>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
         </div>
-        <div class="col-md-6">
-          <label for="fechaEmisionEdit" class="form-label">Fecha de Emisión *</label>
-          <div class="input-group">
-            <input type="date" class="form-control" id="fechaEmisionEdit" name="fechaEmision" [(ngModel)]="facturaSeleccionada.fechaEmision" required>
-            <span class="input-group-text"><i class="bi bi-calendar"></i></span>
-          </div>
+        <div class="modal-body">
+            <form #facturaForm="ngForm" (ngSubmit)="guardarFactura(facturaForm)">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="codigoFactura" class="form-label">Código de Factura *</label>
+                        <input type="text" class="form-control" id="codigoFactura" name="codigoFactura" [(ngModel)]="nuevaFactura.codigoFactura" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="cliente" class="form-label">Cliente *</label>
+                        <select class="form-select" id="cliente" name="cliente" [(ngModel)]="nuevaFactura.cliente" required>
+                            <option value="" disabled selected>Seleccionar cliente</option>
+                            <option *ngFor="let cliente of clientes" [value]="cliente">{{cliente}}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="fechaEmision" class="form-label">Fecha de Emisión *</label>
+                        <div class="input-group">
+                            <input type="date" class="form-control" id="fechaEmision" name="fechaEmision" [(ngModel)]="nuevaFactura.fechaEmision" required>
+                            <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="fechaVencimiento" class="form-label">Fecha de Vencimiento *</label>
+                        <div class="input-group">
+                            <input type="date" class="form-control" id="fechaVencimiento" name="fechaVencimiento" [(ngModel)]="nuevaFactura.fechaVencimiento" required>
+                            <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="moneda" class="form-label">Moneda</label>
+                        <select class="form-select" id="moneda" name="moneda" [(ngModel)]="nuevaFactura.moneda">
+                            <option value="COP" selected>COP - Peso Colombiano</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="valorFactura" class="form-label">Valor de la Factura *</label>
+                        <input type="number" class="form-control" id="valorFactura" name="valorFactura" [(ngModel)]="nuevaFactura.valorFactura" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="tasaCambioEmision" class="form-label">Tasa de Cambio Emisión</label>
+                        <input type="number" class="form-control" id="tasaCambioEmision" name="tasaCambioEmision" [(ngModel)]="nuevaFactura.tasaCambioEmision">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
         </div>
-        <div class="col-md-6">
-          <label for="fechaVencimientoEdit" class="form-label">Fecha de Vencimiento *</label>
-          <div class="input-group">
-            <input type="date" class="form-control" id="fechaVencimientoEdit" name="fechaVencimiento" [(ngModel)]="facturaSeleccionada.fechaVencimiento" required>
-            <span class="input-group-text"><i class="bi bi-calendar"></i></span>
-          </div>
+    </ng-template>
+
+    <ng-template #modalEditarFactura let-modal>
+        <div class="modal-header">
+            <h5 class="modal-title">Editar Factura</h5>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
         </div>
-        <div class="col-md-6">
-          <label for="monedaEdit" class="form-label">Moneda</label>
-          <select class="form-select" id="monedaEdit" name="moneda" [(ngModel)]="facturaSeleccionada.moneda">
-            <option value="COP">COP - Peso Colombiano</option>
-          </select>
+        <div class="modal-body">
+            <form #editarFacturaForm="ngForm" (ngSubmit)="actualizarFactura(editarFacturaForm)">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="codigoFacturaEdit" class="form-label">Código de Factura *</label>
+                        <input type="text" class="form-control" id="codigoFacturaEdit" name="codigoFactura" [(ngModel)]="facturaSeleccionada.codigoFactura" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="clienteEdit" class="form-label">Cliente *</label>
+                        <select class="form-select" id="clienteEdit" name="cliente" [(ngModel)]="facturaSeleccionada.cliente" required>
+                            <option value="" disabled>Seleccionar cliente</option>
+                            <option *ngFor="let cliente of clientes" [value]="cliente">{{cliente}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="fechaEmisionEdit" class="form-label">Fecha de Emisión *</label>
+                        <div class="input-group">
+                            <input type="date" class="form-control" id="fechaEmisionEdit" name="fechaEmision" [(ngModel)]="facturaSeleccionada.fechaEmision" required>
+                            <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="fechaVencimientoEdit" class="form-label">Fecha de Vencimiento *</label>
+                        <div class="input-group">
+                            <input type="date" class="form-control" id="fechaVencimientoEdit" name="fechaVencimiento" [(ngModel)]="facturaSeleccionada.fechaVencimiento" required>
+                            <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="monedaEdit" class="form-label">Moneda</label>
+                        <select class="form-select" id="monedaEdit" name="moneda" [(ngModel)]="facturaSeleccionada.moneda">
+                            <option value="COP">COP - Peso Colombiano</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="valorFacturaEdit" class="form-label">Valor de Factura *</label>
+                        <input type="number" class="form-control" id="valorFacturaEdit" name="valorFactura" [(ngModel)]="facturaSeleccionada.valorFactura" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="tasaCambioEmisionEdit" class="form-label">Tasa de Cambio Emisión</label>
+                        <input type="number" class="form-control" id="tasaCambioEmisionEdit" name="tasaCambioEmision" [(ngModel)]="facturaSeleccionada.tasaCambioEmision">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="valorPagadoEdit" class="form-label">Valor Pagado</label>
+                        <input type="number" class="form-control" id="valorPagadoEdit" name="valorPagado" [(ngModel)]="facturaSeleccionada.valorPagado">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="fechaPagoEdit" class="form-label">Fecha de Pago</label>
+                        <div class="input-group">
+                            <input type="date" class="form-control" id="fechaPagoEdit" name="fechaPago" [(ngModel)]="facturaSeleccionada.fechaPago">
+                            <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="tasaCambioPagoEdit" class="form-label">Tasa de Cambio Pago</label>
+                        <input type="number" class="form-control" id="tasaCambioPagoEdit" name="tasaCambioPago" [(ngModel)]="facturaSeleccionada.tasaCambioPago">
+                    </div>
+                </div>
+                <div class="modal-footer mt-3">
+                    <button type="submit" class="btn btn-primary w-50">Actualizar Factura</button>
+                    <button type="button" class="btn btn-secondary w-50" (click)="modal.dismiss('Cancel click')">Cancelar</button>
+                </div>
+            </form>
         </div>
-        <div class="col-md-6">
-          <label for="valorFacturaEdit" class="form-label">Valor de Factura *</label>
-          <input type="number" class="form-control" id="valorFacturaEdit" name="valorFactura" [(ngModel)]="facturaSeleccionada.valorFactura" required>
-        </div>
-        <div class="col-md-6">
-          <label for="tasaCambioEmisionEdit" class="form-label">Tasa de Cambio Emisión</label>
-          <input type="number" class="form-control" id="tasaCambioEmisionEdit" name="tasaCambioEmision" [(ngModel)]="facturaSeleccionada.tasaCambioEmision">
-        </div>
-        <div class="col-md-6">
-          <label for="valorPagadoEdit" class="form-label">Valor Pagado</label>
-          <input type="number" class="form-control" id="valorPagadoEdit" name="valorPagado" [(ngModel)]="facturaSeleccionada.valorPagado">
-        </div>
-        <div class="col-md-6">
-          <label for="fechaPagoEdit" class="form-label">Fecha de Pago</label>
-          <div class="input-group">
-            <input type="date" class="form-control" id="fechaPagoEdit" name="fechaPago" [(ngModel)]="facturaSeleccionada.fechaPago">
-            <span class="input-group-text"><i class="bi bi-calendar"></i></span>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <label for="tasaCambioPagoEdit" class="form-label">Tasa de Cambio Pago</label>
-          <input type="number" class="form-control" id="tasaCambioPagoEdit" name="tasaCambioPago" [(ngModel)]="facturaSeleccionada.tasaCambioPago">
-        </div>
-      </div>
-      <div class="modal-footer mt-3">
-        <button type="submit" class="btn btn-primary w-50">Actualizar Factura</button>
-        <button type="button" class="btn btn-secondary w-50" (click)="modal.dismiss('Cancel click')">Cancelar</button>
-      </div>
-    </form>
-  </div>
-</ng-template>
+    </ng-template>
+</div>

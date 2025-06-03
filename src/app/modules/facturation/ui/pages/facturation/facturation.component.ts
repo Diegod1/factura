@@ -7,6 +7,8 @@ import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FacturaService, Factura } from '../../../infrastructure/factura.service';
 import { AuthService } from '../../../infrastructure/auth.service';
 import { HttpClientModule } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 declare var bootstrap: any;
 
@@ -31,7 +33,12 @@ interface Cliente {
 @Component({
   selector: 'app-facturation',
   standalone: true,
-  imports: [FormsModule, CommonModule, NgbModule, HttpClientModule],
+  imports: [
+    FormsModule,
+    CommonModule,
+    NgbModule,
+    HttpClientModule
+  ],
   templateUrl: './facturation.component.html',
   styleUrl: './facturation.component.css'
 })
@@ -49,6 +56,7 @@ export class FacturationComponent implements OnInit {
   error: string = '';
   cargando: boolean = false;
   facturaDetalle: Factura | null = null;
+  facturaAInactivar: Factura | null = null;
 
   nuevaFactura: FacturaForm = {
     codigoFactura: '',
@@ -73,7 +81,8 @@ export class FacturationComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private facturaService: FacturaService,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastr: ToastrService
   ) {
     // Establecer el token inicial
     this.establecerTokenInicial();
@@ -105,7 +114,7 @@ export class FacturationComponent implements OnInit {
         this.cargando = false;
       },
       error: (error) => {
-        console.error('Error al cargar facturas:', error);
+        this.toastr.error('Error al cargar las facturas');
         this.error = 'Error al cargar las facturas. Por favor, intente nuevamente.';
         this.cargando = false;
       }
@@ -167,10 +176,11 @@ export class FacturationComponent implements OnInit {
   guardarFactura(form: NgForm) {
     if (form.valid) {
       console.log('Datos de la factura a guardar:', this.nuevaFactura);
+      this.toastr.success('Factura creada correctamente');
       this.modalService.dismissAll();
       this.resetearFormulario(form);
     } else {
-      console.log('Formulario inválido. Por favor, completa todos los campos requeridos.');
+      this.toastr.warning('Debe completar todos los campos obligatorios');
       form.control.markAllAsTouched();
     }
   }
@@ -190,8 +200,10 @@ export class FacturationComponent implements OnInit {
   actualizarFactura(form: NgForm) {
     if (form.valid) {
       console.log('Factura actualizada:', this.facturaSeleccionada);
+      this.toastr.success('Factura actualizada correctamente');
       this.modalService.dismissAll();
     } else {
+      this.toastr.warning('Debe completar todos los campos obligatorios');
       form.control.markAllAsTouched();
     }
   }
@@ -217,6 +229,46 @@ export class FacturationComponent implements OnInit {
       keyboard: false,
       centered: true,
       windowClass: 'modal-dialog-centered'
+    });
+  }
+
+  abrirModalInactivar(content: any, factura: Factura) {
+    this.facturaAInactivar = factura;
+    this.modalService.open(content, {
+      size: 'md',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+      windowClass: 'modal-dialog-centered'
+    });
+  }
+
+  inactivarFactura(modal: any) {
+    if (!this.facturaAInactivar) return;
+    const body = {
+      Tipo_Novedad: 'ELIMINAR',
+      Cliente_Id: this.facturaAInactivar.Cliente_Id,
+      Factura_Id: this.facturaAInactivar.Factura_Id,
+      Fecha_Emision: this.facturaAInactivar.Fecha_Emision,
+      Fecha_Vencimiento: this.facturaAInactivar.Fecha_Vencimiento,
+      Moneda: this.facturaAInactivar.Moneda,
+      Valor_Factura: this.facturaAInactivar.Valor_Factura,
+      Tasa_Cambio_Emision: this.facturaAInactivar.Tasa_Cambio_Emision,
+      Estado_facturacion: this.facturaAInactivar.Estado_Facturacion,
+      Valor_Pagado: this.facturaAInactivar.Valor_Pagado,
+      Fecha_Pago: this.facturaAInactivar.Fecha_Pago,
+      Tasa_Cambio_Pago: this.facturaAInactivar.Tasa_Cambio_Pago,
+      Usuario_Responsable: 'Diego Delgado'
+    };
+    this.facturaService.inactivarFactura(body).subscribe({
+      next: () => {
+        modal.close();
+        this.cargarFacturas();
+        this.toastr.success('Factura inactivada correctamente');
+      },
+      error: () => {
+        this.toastr.error('Error al inactivar la factura');
+      }
     });
   }
 }

@@ -74,7 +74,7 @@
                     <td>
                         <span class="badge" [ngClass]="{
                             'badge-success': factura.Descripcion_Estado_Facturacion === 'PAGADA',
-                            'badge-danger': factura.Descripcion_Estado_Facturacion === 'ANULADA',
+                            'badge-danger': factura.Descripcion_Estado_Facturacion === 'ANULADO',
                             'badge-primary': factura.Descripcion_Estado_Facturacion === 'EMITIDA'
                         }">{{factura.Descripcion_Estado_Facturacion}}</span>
                     </td>
@@ -84,13 +84,13 @@
                     <td>
                         <span class="badge" [ngClass]="{
                             'bg-success': factura.Estado_Rec === 'A',
-                            'bg-danger': factura.Estado_Rec === 'I'
+                            'bg-danger': factura.Estado_Rec === 'I' || factura.Descripcion_Estado_Facturacion === 'ANULADA'
                         }">{{factura.Estado_Rec === 'A' ? 'Activo' : 'Inactivo'}}</span>
                     </td>
                     <td class="action-icons">
                         <i class="bi bi-eye-fill text-light-blue" (click)="abrirModalDetalle(modalDetalleFactura, factura)"></i>
                         <i class="bi bi-pencil-fill text-primary" (click)="abrirModalEditar(modalEditarFactura, factura)"></i>
-                        <i class="bi bi-trash-fill text-danger"></i>
+                        <i class="bi bi-trash-fill text-danger" (click)="abrirModalInactivar(modalInactivarFactura, factura)"></i>
                     </td>
                 </tr>
             </tbody>
@@ -279,7 +279,7 @@
                     <strong>Estado:</strong><br>
                     <span class="badge" [ngClass]="{
                         'bg-success': facturaDetalle?.Estado_Rec === 'A',
-                        'bg-danger': facturaDetalle?.Estado_Rec === 'I'
+                        'bg-danger': facturaDetalle?.Estado_Rec === 'I' || facturaDetalle?.Descripcion_Estado_Facturacion === 'ANULADA'
                     }">
                         {{ facturaDetalle?.Estado_Rec === 'A' ? 'Activo' : 'Inactivo' }}
                     </span>
@@ -288,6 +288,22 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary w-100" (click)="modal.dismiss('Close click')">Cerrar</button>
+        </div>
+    </ng-template>
+
+    <ng-template #modalInactivarFactura let-modal>
+        <div class="modal-header">
+            <h5 class="modal-title">Confirmar Inactivación</h5>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+            <p>¿Está seguro de que desea inactivar la factura <b>{{ facturaAInactivar?.Factura_Id }}</b>?</p>
+            <div class="mb-2 text-secondary">Cliente: {{ facturaAInactivar?.Nombre_Cliente }}</div>
+            <div class="mb-2 text-secondary">Valor: {{ formatearMoneda(facturaAInactivar?.Valor_Factura || 0) }}</div>
+        </div>
+        <div class="modal-footer d-flex flex-column gap-2">
+            <button type="button" class="btn btn-danger w-100" (click)="inactivarFactura(modal)">Sí, Inactivar</button>
+            <button type="button" class="btn btn-outline-secondary w-100" (click)="modal.dismiss('Cancel click')">Cancelar</button>
         </div>
     </ng-template>
 </div>

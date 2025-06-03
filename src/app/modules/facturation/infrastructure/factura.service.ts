@@ -76,4 +76,9 @@ export class FacturaService {
       return cumpleCodigoCliente && cumpleEstado && cumpleCliente;
     });
   }
+
+  inactivarFactura(body: any): Observable<any> {
+    const url = 'https://www.easysalespruebas.com.co/API_Proy_Facturacion/api/WS_FAC_09_Controller/WSFAC002';
+    return this.http.post(url, body, { headers: this.getHeaders() });
+  }
 }

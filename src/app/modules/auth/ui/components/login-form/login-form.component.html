@@ -1,0 +1,54 @@
+<div class="login-container">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+    <h2>Iniciar Sesión</h2>
+    
+    <div class="form-group">
+      <label for="usuario">Correo Electrónico</label>
+      <input 
+        type="email" 
+        id="usuario" 
+        formControlName="usuario" 
+        class="form-control"
+        [ngClass]="{'is-invalid': loginForm.get('usuario')?.invalid && loginForm.get('usuario')?.touched}"
+        placeholder="Ingrese su correo electrónico">
+      <div class="invalid-feedback" *ngIf="loginForm.get('usuario')?.errors?.['required'] && loginForm.get('usuario')?.touched">
+        El correo electrónico es requerido
+      </div>
+      <div class="invalid-feedback" *ngIf="loginForm.get('usuario')?.errors?.['email'] && loginForm.get('usuario')?.touched">
+        Ingrese un correo electrónico válido
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="contrasena">Contraseña</label>
+      <input 
+        type="password" 
+        id="contrasena" 
+        formControlName="contrasena" 
+        class="form-control"
+        [ngClass]="{'is-invalid': loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched}"
+        placeholder="Ingrese su contraseña">
+      <div class="invalid-feedback" *ngIf="loginForm.get('contrasena')?.errors?.['required'] && loginForm.get('contrasena')?.touched">
+        La contraseña es requerida
+      </div>
+      <div class="invalid-feedback" *ngIf="loginForm.get('contrasena')?.errors?.['minlength'] && loginForm.get('contrasena')?.touched">
+        La contraseña debe tener al menos 6 caracteres
+      </div>
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <button 
+      type="submit" 
+      class="btn-login" 
+      [disabled]="loginForm.invalid || loading">
+      {{ loading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
+    </button>
+
+    <div class="form-footer">
+      <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+    </div>
+  </form>
+</div>

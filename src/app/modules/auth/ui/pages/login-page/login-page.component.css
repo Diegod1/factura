@@ -1,0 +1,29 @@
+.imag-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background-color: #4a90e2;
+}
+
+.imag-container img {
+    max-width: 80%;
+    height: auto;
+}
+
+.bg-login-image {
+    background: #006194;
+    width: auto;
+    height: 650px;
+}
+
+@media (max-width: 991.98px) {
+    .bg-login-image {
+        display: none;
+    }
+    
+    .col-lg-6 {
+        width: 100%;
+    }
+}

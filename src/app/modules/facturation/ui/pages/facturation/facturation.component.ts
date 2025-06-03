@@ -48,6 +48,7 @@ export class FacturationComponent implements OnInit {
   clienteSeleccionado: string = '';
   error: string = '';
   cargando: boolean = false;
+  facturaDetalle: Factura | null = null;
 
   nuevaFactura: FacturaForm = {
     codigoFactura: '',
@@ -206,5 +207,16 @@ export class FacturationComponent implements OnInit {
       style: 'currency',
       currency: 'COP'
     }).format(valor);
+  }
+
+  abrirModalDetalle(content: any, factura: Factura) {
+    this.facturaDetalle = factura;
+    this.modalService.open(content, {
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      centered: true,
+      windowClass: 'modal-dialog-centered'
+    });
   }
 }

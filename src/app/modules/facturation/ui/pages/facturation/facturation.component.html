@@ -88,7 +88,7 @@
                         }">{{factura.Estado_Rec === 'A' ? 'Activo' : 'Inactivo'}}</span>
                     </td>
                     <td class="action-icons">
-                        <i class="bi bi-eye-fill text-light-blue"></i>
+                        <i class="bi bi-eye-fill text-light-blue" (click)="abrirModalDetalle(modalDetalleFactura, factura)"></i>
                         <i class="bi bi-pencil-fill text-primary" (click)="abrirModalEditar(modalEditarFactura, factura)"></i>
                         <i class="bi bi-trash-fill text-danger"></i>
                     </td>
@@ -224,6 +224,70 @@
                     <button type="button" class="btn btn-secondary w-50" (click)="modal.dismiss('Cancel click')">Cancelar</button>
                 </div>
             </form>
+        </div>
+    </ng-template>
+
+    <!-- Modal Detalle Factura -->
+    <ng-template #modalDetalleFactura let-modal>
+        <div class="modal-header">
+            <h5 class="modal-title">Detalle de Factura {{ facturaDetalle?.Factura_Id }}</h5>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <strong>Código de Factura:</strong><br>{{ facturaDetalle?.Factura_Id }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Cliente:</strong><br>{{ facturaDetalle?.Nombre_Cliente }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Fecha de Emisión:</strong><br>{{ formatearFecha(facturaDetalle?.Fecha_Emision || '') }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Fecha de Vencimiento:</strong><br>{{ formatearFecha(facturaDetalle?.Fecha_Vencimiento || '') }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Moneda:</strong><br>{{ facturaDetalle?.Descripcion_Moneda }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Valor de Factura:</strong><br>{{ formatearMoneda(facturaDetalle?.Valor_Factura || 0) }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Tasa de Cambio Emisión:</strong><br>{{ formatearMoneda(facturaDetalle?.Tasa_Cambio_Emision || 0) }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Estado de Facturación:</strong><br>
+                    <span [ngClass]="{
+                        'text-success': facturaDetalle?.Descripcion_Estado_Facturacion === 'PAGADA',
+                        'text-primary': facturaDetalle?.Descripcion_Estado_Facturacion === 'EMITIDA',
+                        'text-danger': facturaDetalle?.Descripcion_Estado_Facturacion === 'ANULADA'
+                    }">
+                        {{ facturaDetalle?.Descripcion_Estado_Facturacion }}
+                    </span>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Valor Pagado:</strong><br>{{ formatearMoneda(facturaDetalle?.Valor_Pagado || 0) }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Fecha de Pago:</strong><br>{{ formatearFecha(facturaDetalle?.Fecha_Pago || '') }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Tasa de Cambio Pago:</strong><br>{{ formatearMoneda(facturaDetalle?.Tasa_Cambio_Pago || 0) }}
+                </div>
+                <div class="col-md-6 mb-2">
+                    <strong>Estado:</strong><br>
+                    <span class="badge" [ngClass]="{
+                        'bg-success': facturaDetalle?.Estado_Rec === 'A',
+                        'bg-danger': facturaDetalle?.Estado_Rec === 'I'
+                    }">
+                        {{ facturaDetalle?.Estado_Rec === 'A' ? 'Activo' : 'Inactivo' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary w-100" (click)="modal.dismiss('Close click')">Cerrar</button>
         </div>
     </ng-template>
 </div>
